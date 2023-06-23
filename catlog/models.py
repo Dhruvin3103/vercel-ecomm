@@ -24,8 +24,13 @@ class Products(models.Model):
     ]
     name = models.CharField(max_length=300,null=False)
     color = ColorField(default='#FF0000')
-    size = models.CharField(max_length=300,choices=CHOICES)
+    price = models.IntegerField(default=0)
+    available_count = models.IntegerField(default=0)
     SubCateorgy = models.ForeignKey(SubCateorgy,on_delete=models.CharField)
+    is_small_size = models.BooleanField(default=False)
+    is_medium_size = models.BooleanField(default=False)
+    is_large_size = models.BooleanField(default=False)
+    is_extra_large_size = models.BooleanField(default=False)
 
 class ProdImages(models.Model):
     image = models.ImageField(upload_to="catlog/subcatlog/product")
