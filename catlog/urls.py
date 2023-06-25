@@ -1,10 +1,8 @@
 from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from .views import MainCateorgyAPI
-
-router = DefaultRouter()
-router.register('mainCat', MainCateorgyAPI, 'mainCategory-view')
+from .views import MainCateorgyAPI, ProductAPI, SubCateorgyAPI
 
 urlpatterns = [
-    path('', include(router.urls))
+    path('main-cat/', MainCateorgyAPI.as_view(), name = 'mainCategory-view'),
+    path('sub-cat/<int:main_cat_id>/', SubCateorgyAPI.as_view(), name = 'subCategory-view'),
+    path('product/<int:sub_cat_id>/', ProductAPI.as_view(), name = 'product-view'),
 ]
