@@ -9,7 +9,7 @@ class User(AbstractBaseUser):
     first_name = models.CharField(max_length=20, help_text='Enter your First name')
     last_name = models.CharField(max_length=20, help_text='Enter your Last name')
     date_of_birth = models.DateField(help_text='Enter your Date of Birth', null=True, blank=True)
-    phone = PhoneNumberField(null=False, blank=False, unique=True, help_text='Enter Phone Number')
+    phone = PhoneNumberField( help_text='Enter Phone Number')
     email = models.EmailField(
         verbose_name='email address',
         max_length=255,
@@ -27,11 +27,12 @@ class User(AbstractBaseUser):
     objects = UserManager()
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email','phone']
+    REQUIRED_FIELDS = ['email']
 
     def __str__(self):
         return self.username+', '+self.email+', '+str(self.phone)
 
+    
     def has_perm(self, perm, obj=None):
         "Does the user have a specific permission?"
         # Simplest possible answer: Yes, always
