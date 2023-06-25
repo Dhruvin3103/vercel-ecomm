@@ -10,17 +10,15 @@ class MainCateorgy(models.Model):
     def __str__(self) -> str:
         return self.name
 
-
-
 class SubCateorgy(models.Model):
     name = models.CharField(max_length=300,null=False)
-    MainCateorgy = models.ForeignKey(MainCateorgy,on_delete=models.CASCADE)
+    main_cateorgy = models.ForeignKey(MainCateorgy,on_delete=models.CASCADE)
     image = models.ImageField(upload_to="catlog/subcatlog")
 
     def __str__(self) -> str:
         return self.name
 
-class Products(models.Model):
+class Product(models.Model):
     CHOICES = [
         ("S", "small"),
         ("M", "Mdeium"),
@@ -31,7 +29,7 @@ class Products(models.Model):
     color = ColorField(default='#FF0000')
     price = models.IntegerField(default=0)
     available_count = models.IntegerField(default=0)
-    SubCateorgy = models.ForeignKey(SubCateorgy,on_delete=models.CharField)
+    sub_cateorgy = models.ForeignKey(SubCateorgy,on_delete=models.CharField)
     is_small_size = models.BooleanField(default=False)
     is_medium_size = models.BooleanField(default=False)
     is_large_size = models.BooleanField(default=False)
@@ -39,11 +37,10 @@ class Products(models.Model):
 
     def __str__(self) -> str:
         return self.name
-    
 
-class ProdImages(models.Model):
+class ProdImage(models.Model):
     image = models.ImageField(upload_to="catlog/subcatlog/product")
-    image_fk = models.ForeignKey(Products,on_delete=models.CASCADE)
+    image_fk = models.ForeignKey(Product,on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return self.image_fk.name +' '+ str(self.id)
@@ -59,11 +56,11 @@ class ProdReview(models.Model):
     ]
     comment = models.CharField(max_length=300,null=True)
     stars = models.IntegerField(choices=CHOICES)
-    review_fk = models.ForeignKey(Products,on_delete=models.CASCADE)
+    review_fk = models.ForeignKey(Product,on_delete=models.CASCADE)
     reviewed_by = models.ForeignKey(User,on_delete=models.SET_NULL,null=True,blank=True)
 
     def __str__(self) -> str:
         if self.reviewed_by is not None:
             return self.reviewed_by + "reviewed for " + self.review_fk.name
         else:
-            return  "Someone reviewed for " + self.review_fk.name
+            return "Someone reviewed for " + self.review_fk.name
