@@ -9,3 +9,4 @@ from rest_framework import viewsets
 class MainCateorgyAPI(viewsets.ModelViewSet):
     serializer_class = MainCateorgySerializer
     queryset = MainCateorgy.objects.all()
+    
