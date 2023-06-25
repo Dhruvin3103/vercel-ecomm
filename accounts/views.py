@@ -8,7 +8,22 @@ from rest_framework.authtoken.models import Token
 from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import redirect
+from allauth.account.models import EmailAddress
 # Create your views here.
+
+def RedirectVerify(request):
+    try:
+        user_em = EmailAddress.objects.filter(email=request.user.email)
+        if user_em:
+            user = User.objects.get(email=user_em[0])
+            user.is_email_verified=True
+            user.save()
+            return redirect("/")
+        else : 
+            raise Exception("No email found")
+    except:
+        raise Exception("Anonymous User")
 
 class Register(GenericAPIView):
     serializer_class = UserSerializer
