@@ -14,6 +14,8 @@ from django.shortcuts import redirect
 from allauth.account.models import EmailAddress
 from django.core.mail import send_mail
 from django.conf import settings
+from uuid import uuid4
+from django.contrib.sites.models import Site
 # Create your views here.
 
 def RedirectVerify(request):
@@ -53,7 +55,7 @@ class Register(GenericAPIView):
             if not serializer.is_valid():
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             serializer.save()
-            message = f'Hi!\n{serializer.data["username"]}, thank you for registering in Committee Managment System.\nPlease Click here to verfy Your Account http://127.0.0.1:8000/accounts/verify/{serializer.data["id"]}/{serializer.data["email_token"]}/\nThis is a Computer generated mail don\'t reply to this mail'
+            message = f'Hi!\n{serializer.data["username"]}, thank you for registering in Committee Managment System.\nPlease Click here to verfy Your Account {Site.objects.get_current().domain}accounts/verify/{serializer.data["id"]}/{serializer.data["email_token"]}/\nThis is a Computer generated mail don\'t reply to this mail'
             email_from = settings.EMAIL_HOST_USER
             recipient_list = [serializer.data['email'], ]
             send_mail( subject, message, email_from, recipient_list )
@@ -63,7 +65,43 @@ class Register(GenericAPIView):
             return Response({
                 "Error" : str(e)
             })
-    
+
+class PasswordResetAPI(APIView):
+    def post(self, request):
+        try:
+            user = User.objects.get(email = request.data.get('email'))
+            subject = 'Password Reset Mail'
+            uuid = uuid4()
+            user.password_reset_token = uuid
+            user.save()
+            text_content = f'{Site.objects.get_current().domain}accounts/password-reset-redirect/{user.id}/{uuid}/'
+            email_from = settings.EMAIL_HOST_USER
+            recipient_list = [user.email, ]
+            send_mail( subject, text_content, email_from, recipient_list )
+            return Response({'status': 200, 'message' : 'Please check your mail a password reset link has been provided'})
+        except Exception as e:
+            return Response({'status': 405, 'error': str(e) ,'message': 'Sorry Some error has occured, Please try again after sometime'})
+
+class PasswordResetView(APIView):
+    def get(self , request, id, token):
+        user_obj = User.objects.get(id=id)
+        if(token == user_obj.password_reset_token):
+            return render(request, "passwordreset.html", {'id' : id, 'token' : token})
+        else:
+            return HttpResponse('<h1>Token is not valid</h1>')
+    def post(self, request, id, token):
+        password = request.POST['password']
+        user_obj = User.objects.get(id=id)
+        if(token == user_obj.password_reset_token):
+            try:
+                user_obj.set_password(password)
+                user_obj.save()
+                return HttpResponse('<h1>User\'s Password changed Successfully</h1>')
+            except:
+                return HttpResponse('<h1>Some error has occured</h1>')
+        else:
+            return HttpResponse('<h1>Token is not valid</h1>') 
+
 class UpdateUser(GenericAPIView,UpdateModelMixin):
     serializer_class = UserSerializer
     queryset = User.objects.all()
