@@ -8,5 +8,6 @@ urlpatterns = [
     path('logout/', Logout.as_view()),
     path('user-data/',UserData.as_view()),
     path('redirect/',RedirectVerify),
-    path('user-data/<id>/',UpdateUser.as_view())
+    path('user-data/<id>/',UpdateUser.as_view()),
+    path('verify/<id>/<token>/', Register.as_view(), name = 'email-verify'),
 ]
