@@ -24,3 +24,4 @@ class ProductAPI(GenericAPIView):
     def get(self, request, sub_cat_id):
         serializer = ProductSerializer(Product.objects.filter(sub_cateorgy = sub_cat_id),many=True) 
         return Response(serializer.data)
+        
