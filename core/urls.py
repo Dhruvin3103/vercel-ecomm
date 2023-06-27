@@ -38,6 +38,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('Oauth/', include('allauth.urls')),
     path('catlog/',include('catlog.urls')),
+    path('cart/',include('cart.urls'))
 ]
 
 if settings.DEBUG:
