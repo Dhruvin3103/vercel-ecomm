@@ -14,9 +14,4 @@ class UserSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-    # def update(self, instance, valida
-    #            ted_data):
-        
-    #     return super().update(instance, validated_data)
-
 

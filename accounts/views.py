@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from .models import User
 from rest_framework.generics import GenericAPIView,UpdateAPIView
 from rest_framework.mixins import UpdateModelMixin
@@ -34,7 +34,6 @@ def RedirectVerify(request):
 class Register(GenericAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
-
     def get(self, request, id, token):
         try:
             user_obj = User.objects.get(id = id)
@@ -42,10 +41,12 @@ class Register(GenericAPIView):
             if(token == user_data['email_token']):
                 user_obj.is_email_verified = True
                 user_obj.save()
-                return HttpResponse('<h1>User is Verified Successfully</h1>')
+                return redirect('http://127.0.0.1:3000/login')
+                # return HttpResponse('<h1>User is Verified Successfully</h1>')
             else:
                 return HttpResponse('<h1>Token is not valid</h1>')
-        except:
+        except Exception as e:
+            print(e)
             return HttpResponse('<h1>Sorry Some error has occured</h1>')
 
     def post (self, request):
@@ -59,12 +60,9 @@ class Register(GenericAPIView):
             email_from = settings.EMAIL_HOST_USER
             recipient_list = [serializer.data['email'], ]
             send_mail( subject, message, email_from, recipient_list )
-            
             return Response(serializer.data)
         except Exception as e:
-            return Response({
-                "Error" : str(e)
-            })
+            return Response({"Error" : str(e)})
 
 class PasswordResetAPI(APIView):
     def post(self, request):
