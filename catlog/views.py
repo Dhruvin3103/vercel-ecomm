@@ -2,8 +2,11 @@ from django.shortcuts import render
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, CreateModelMixin
 from rest_framework.response import Response
-from .models import ProdImage,ProdReview,Product,SubCateorgy,MainCateorgy
-from .serializers import MainCateorgySerializer,SubCateorgySerializer,ProductSerializer,ProdReviewSerializer,ProdImageSerializer
+from .models import ProdImage,ProdReview,Product,SubCateorgy,MainCateorgy,Whishlist
+from .serializers import MainCateorgySerializer,SubCateorgySerializer,ProductSerializer,ProdReviewSerializer,ProdImageSerializer,WhislistSerializer
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+
 
 class MainCateorgyAPI(GenericAPIView, ListModelMixin):
     serializer_class = MainCateorgySerializer
@@ -25,3 +28,19 @@ class ProductAPI(GenericAPIView):
         serializer = ProductSerializer(Product.objects.filter(sub_cateorgy = sub_cat_id),many=True) 
         return Response(serializer.data)
         
+
+class WhislistAPI(GenericAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = WhislistSerializer
+    queryset = Whishlist.objects.all()
+    lookup_field = "user"
+
+    def get(self, request):
+        serializer = WhislistSerializer(Whishlist.objects.filter(user = request.user.id),many =True)
+        return Response(serializer.data)
+    def post(self, request):
+        serializer = WhislistSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)

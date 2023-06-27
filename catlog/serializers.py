@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import ProdImage,ProdReview,Product,SubCateorgy,MainCateorgy
+from .models import ProdImage,ProdReview,Product,SubCateorgy,MainCateorgy,Whishlist
 from accounts.models import User
 from accounts.serializers import UserSerializer
 
@@ -48,3 +48,10 @@ class ProdImageSerializer(serializers.ModelSerializer):
         model = ProdImage
         fields = ["image"]
         depth = 0
+
+class WhislistSerializer(serializers.ModelSerializer):
+    user = UserSerializer
+    product = ProductSerializer
+    class Meta:
+        model = Whishlist
+        fields = "__all__"
