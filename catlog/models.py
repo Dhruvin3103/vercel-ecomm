@@ -69,4 +69,4 @@ class Whishlist(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ManyToManyField(Product)
     def __str__(self) -> str:
-        return super().__str__()
+        return str(self.user)
