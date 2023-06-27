@@ -21,6 +21,7 @@ from django.contrib.sites.models import Site
 def RedirectVerify(request):
     try:
         user_em = EmailAddress.objects.filter(email=request.user.email)
+        print(user_em==None)
         if user_em:
             user = User.objects.get(email=user_em[0])
             user.is_email_verified=True

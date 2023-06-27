@@ -9,6 +9,12 @@ class User(AbstractBaseUser):
     last_name = models.CharField(max_length=20, help_text='Enter your Last name')
     date_of_birth = models.DateField(help_text='Enter your Date of Birth', null=True, blank=True)
     phone = PhoneNumberField(null=True,blank=True,help_text='Enter Phone Number')
+    username = models.EmailField(
+        verbose_name='Users Email',
+        max_length=255,
+        unique=True,
+        help_text='Enter your Email',
+    )
     email = models.EmailField(
         verbose_name='email address',
         max_length=255,
@@ -25,11 +31,11 @@ class User(AbstractBaseUser):
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
 
     def __str__(self):
-        return self.email+', '+str(self.phone)
+        return self.username+', '+str(self.phone)
 
     
     def has_perm(self, perm, obj=None):
