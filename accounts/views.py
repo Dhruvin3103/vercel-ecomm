@@ -34,7 +34,6 @@ def RedirectVerify(request):
 class Register(GenericAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
-
     def get(self, request, id, token):
         try:
             user_obj = User.objects.get(id = id)
@@ -59,12 +58,9 @@ class Register(GenericAPIView):
             email_from = settings.EMAIL_HOST_USER
             recipient_list = [serializer.data['email'], ]
             send_mail( subject, message, email_from, recipient_list )
-            
             return Response(serializer.data)
         except Exception as e:
-            return Response({
-                "Error" : str(e)
-            })
+            return Response({"Error" : str(e)})
 
 class PasswordResetAPI(APIView):
     def post(self, request):
