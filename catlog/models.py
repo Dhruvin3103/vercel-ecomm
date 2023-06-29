@@ -1,3 +1,4 @@
+from collections.abc import Collection
 from colorfield.fields import ColorField
 from django.db import models
 from accounts.models import User
@@ -36,7 +37,7 @@ class Product(models.Model):
     is_extra_large_size = models.BooleanField(default=False)
 
     def __str__(self) -> str:
-        return self.name
+        return self.name+" "+str(self.id)+" "+str(self.available_count)
 
 class ProdImage(models.Model):
     image = models.ImageField(upload_to="catlog/subcatlog/product")
@@ -65,8 +66,10 @@ class ProdReview(models.Model):
         else:
             return "Someone reviewed for " + self.review_fk.name
 
-class Whishlist(models.Model):
+class WishlistProduct(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    product = models.ManyToManyField(Product)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     def __str__(self) -> str:
-        return str(self.user)
+        return str(self.wishlist) +', '+ str(self.product)
+    class Meta:
+        unique_together = ('user','product')
