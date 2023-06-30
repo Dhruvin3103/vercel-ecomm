@@ -101,13 +101,17 @@ class PasswordResetView(APIView):
         else:
             return HttpResponse('<h1>Token is not valid</h1>') 
 
-class UpdateUser(GenericAPIView,UpdateModelMixin):
+class UpdateUser(GenericAPIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     serializer_class = UserSerializer
-    queryset = User.objects.all()
-    lookup_field = 'id'
 
-    def patch(self, request, id):
-        return self.partial_update(request,id)
+    def patch(self, request):
+        serializer = self.serializer_class(User.objects.get(id =request.user.id), data = request.data, partial =True)
+        if not serializer.is_valid():
+            return Response(serializer.errors)
+        serializer.save()
+        return Response(serializer.data)
     
 class Logout(APIView):
     def post (self, request):
