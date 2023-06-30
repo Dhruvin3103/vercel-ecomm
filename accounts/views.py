@@ -17,20 +17,23 @@ from django.conf import settings
 from uuid import uuid4
 from django.contrib.sites.models import Site
 # Create your views here.
-
+#  [{'id': 11, 'user_id': 3, 'email': 'dhruvinhemant5@gmail.com', 'verified': True, 'primary': True}]>
 def RedirectVerify(request):
     try:
-        user_em = EmailAddress.objects.filter(email=request.user.email)
+        user_em = EmailAddress.objects.get(email=request.user.email)
         print(user_em)
         if user_em:
-            user = User.objects.get(email=user_em[0])
+            user = User.objects.get(email=user_em.email)
+            user.username = user_em.email
             user.is_email_verified=True
             user.save()
             return redirect("/")
         else : 
             raise Exception("No email found")
-    except:
-        raise Exception("Anonymous User")
+    except Exception as e:
+        user_em = EmailAddress.objects.filter(email=request.user.email)
+        print(user_em.values())
+        raise Exception("Anonymous User"+" "+ str(e))
 
 class Register(GenericAPIView):
     serializer_class = UserSerializer
