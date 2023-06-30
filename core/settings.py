@@ -59,6 +59,11 @@ INSTALLED_APPS = [
 
 SITE_ID = 1
 
+ACCOUNT_USER_MODEL_USERNAME_FIELD = 'email' 
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'SCOPE': [
@@ -207,6 +212,7 @@ SWAGGER_SETTINGS = {
 }
 
 LOGIN_REDIRECT_URL = "http://127.0.0.1:8000/accounts/redirect/"
+# ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = False
 AUTHENTICATION_BACKENDS = [
     
     # Needed to login by username in Django admin, regardless of `allauth`
@@ -223,3 +229,4 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = "verifyapidhruvin@gmail.com"
 EMAIL_HOST_PASSWORD = "qutzjtruvkehmrmk"
+
