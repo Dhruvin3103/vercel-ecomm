@@ -52,7 +52,7 @@ class ProdImageSerializer(serializers.ModelSerializer):
 class WishlistProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = WishlistProduct
-        fields = ["product"]
+        fields = "__all__"
     def to_representation(self, instance):
         data = super().to_representation(instance)
         val = ProductSerializer(

@@ -43,6 +43,7 @@ class WishlistProductAPI(GenericAPIView, CreateModelMixin, ListModelMixin):
 
     def post(self, request):
         try:
+            print(request.user.id)
             serializer = self.serializer_class(data = {'user' : request.user.id,'product':request.data['product']})
             if not serializer.is_valid():
                 return Response(serializer.errors)
