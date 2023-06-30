@@ -37,7 +37,7 @@ class Product(models.Model):
     is_extra_large_size = models.BooleanField(default=False)
 
     def __str__(self) -> str:
-        return self.name+" "+str(self.id)+" "+str(self.available_count)
+        return self.name+" "+"id : "+str(self.id)+" "+str(self.available_count)
 
 class ProdImage(models.Model):
     image = models.ImageField(upload_to="catlog/subcatlog/product")
