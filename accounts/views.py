@@ -1,10 +1,10 @@
 from django.http import HttpResponse
 from django.shortcuts import render,redirect
-from .models import User
+from .models import User, Address
 from rest_framework.generics import GenericAPIView,UpdateAPIView
-from rest_framework.mixins import UpdateModelMixin
+from rest_framework.mixins import UpdateModelMixin,ListModelMixin,CreateModelMixin
 from rest_framework.views import APIView
-from .serializers import UserSerializer
+from .serializers import UserSerializer, AddressSerializer
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework import status
@@ -132,3 +132,21 @@ class UserData(APIView):
     def get(self, request):
         user = UserSerializer(User.objects.get(id = request.user.id))
         return Response(user.data)
+    
+class AddressAPI(GenericAPIView, ListModelMixin, CreateModelMixin):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = AddressSerializer
+
+    def get_queryset(self):
+        queryset = Address.objects.filter(user=self.request.user)
+        return queryset
+    
+    def perform_create(self, serializer):
+        user = self.request.user
+        serializer.save(user=user)
+    
+    def get(self, request):
+        return self.list(request)
+    def post(self, request):
+        return self.create(request)

@@ -56,3 +56,12 @@ class User(AbstractBaseUser):
     
     def is_verified(self):
         return (self.is_email_verified and self.is_phone_verified)
+    
+class Address(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    address_line_1 = models.CharField(max_length=100)
+    address_line_2 = models.CharField(max_length=100, null=True, blank=True)
+    city = models.CharField(max_length=50)
+    pincode = models.BigIntegerField()
+    country = models.CharField(max_length=50, default="India")
+    state = models.CharField(max_length=50, default="Maharastra")

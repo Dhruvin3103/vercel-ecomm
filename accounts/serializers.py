@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User
+from .models import User, Address
 from uuid import uuid4
 
 class UserSerializer(serializers.ModelSerializer):
@@ -15,4 +15,8 @@ class UserSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        exclude = ['user']
 
