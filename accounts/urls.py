@@ -8,7 +8,7 @@ urlpatterns = [
     path('logout/', Logout.as_view()),
     path('user-data/',UserData.as_view()),
     path('redirect/',RedirectVerify),
-    path('user-data/<id>/',UpdateUser.as_view()),
+    path('user-data-patch/',UpdateUser.as_view()),
     path('verify/<id>/<token>/', Register.as_view(), name = 'email-verify'),
     path('password-reset/', PasswordResetAPI.as_view(), name = 'password-reset'),
     path('password-reset-redirect/<id>/<token>/', PasswordResetView.as_view(), name = 'password-reset-redirect'),
