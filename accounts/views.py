@@ -1,8 +1,8 @@
 from django.http import HttpResponse
 from django.shortcuts import render,redirect
 from .models import User, Address
-from rest_framework.generics import GenericAPIView,UpdateAPIView
-from rest_framework.mixins import UpdateModelMixin,ListModelMixin,CreateModelMixin
+from rest_framework.generics import GenericAPIView
+from rest_framework.mixins import UpdateModelMixin,ListModelMixin,CreateModelMixin,DestroyModelMixin
 from rest_framework.views import APIView
 from .serializers import UserSerializer, AddressSerializer
 from rest_framework.response import Response
@@ -16,8 +16,8 @@ from django.core.mail import send_mail
 from django.conf import settings
 from uuid import uuid4
 from django.contrib.sites.models import Site
-# Create your views here.
-#  [{'id': 11, 'user_id': 3, 'email': 'dhruvinhemant5@gmail.com', 'verified': True, 'primary': True}]>
+from .permisions import IsValidUser
+ 
 def RedirectVerify(request):
     try:
         user_em = EmailAddress.objects.get(email=request.user.email)
@@ -150,3 +150,15 @@ class AddressAPI(GenericAPIView, ListModelMixin, CreateModelMixin):
         return self.list(request)
     def post(self, request):
         return self.create(request)
+
+class UpdateAddressAPI(GenericAPIView, UpdateModelMixin, DestroyModelMixin):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated, IsValidUser]
+    serializer_class = AddressSerializer
+    queryset = Address.objects.all()
+    lookup_field = 'id'
+
+    def patch(self, request, id):
+        return self.partial_update(request, id)
+    def delete(self, request, id):
+        return self.destroy(request, id)
