@@ -66,3 +66,6 @@ class Address(models.Model):
     pincode = models.BigIntegerField()
     country = models.CharField(max_length=50, default="India")
     state = models.CharField(max_length=50, default="Maharastra")
+
+    def __str__(self):
+        return str(self.user) +' '+str(self.id)

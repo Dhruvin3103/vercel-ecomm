@@ -1,8 +1,8 @@
 from django.http import HttpResponse
 from django.shortcuts import render,redirect
 from .models import User, Address
-from rest_framework.generics import GenericAPIView,UpdateAPIView
-from rest_framework.mixins import UpdateModelMixin,ListModelMixin,CreateModelMixin
+from rest_framework.generics import GenericAPIView
+from rest_framework.mixins import UpdateModelMixin,ListModelMixin,CreateModelMixin,DestroyModelMixin
 from rest_framework.views import APIView
 from .serializers import UserSerializer, AddressSerializer
 from rest_framework.response import Response
@@ -17,6 +17,24 @@ from django.core.mail import send_mail
 from django.conf import settings
 from uuid import uuid4
 from django.contrib.sites.models import Site
+from .permisions import IsValidUser
+ 
+def RedirectVerify(request):
+    try:
+        user_em = EmailAddress.objects.get(email=request.user.email)
+        print(user_em)
+        if user_em:
+            user = User.objects.get(email=user_em.email)
+            user.username = user_em.email
+            user.is_email_verified=True
+            user.save()
+            return redirect("/")
+        else : 
+            raise Exception("No email found")
+    except Exception as e:
+        user_em = EmailAddress.objects.filter(email=request.user.email)
+        print(user_em.values())
+        raise Exception("Anonymous User"+" "+ str(e))
 
 class Register(GenericAPIView):
     serializer_class = UserSerializer
@@ -133,3 +151,15 @@ class AddressAPI(GenericAPIView, ListModelMixin, CreateModelMixin):
         return self.list(request)
     def post(self, request):
         return self.create(request)
+
+class UpdateAddressAPI(GenericAPIView, UpdateModelMixin, DestroyModelMixin):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated, IsValidUser]
+    serializer_class = AddressSerializer
+    queryset = Address.objects.all()
+    lookup_field = 'id'
+
+    def patch(self, request, id):
+        return self.partial_update(request, id)
+    def delete(self, request, id):
+        return self.destroy(request, id)
