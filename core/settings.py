@@ -49,54 +49,15 @@ INSTALLED_APPS = [
     'accounts',
     'catlog',
     'colorfield',
+    'cart',
     #oauth
     'oauth2_provider',
     'social_django',
     'drf_social_oauth2',
-    'cart'
+    
 ]
 
 SITE_ID = 1
-
-# ACCOUNT_USER_MODEL_USERNAME_FIELD = 'email' 
-# ACCOUNT_EMAIL_REQUIRED = True
-# ACCOUNT_USERNAME_REQUIRED = False
-# ACCOUNT_AUTHENTICATION_METHOD = 'email'
-
-# SOCIALACCOUNT_PROVIDERS = {
-#     'google': {
-#         'SCOPE': [
-#             'profile',
-#             'email',
-#         ],
-#         'AUTH_PARAMS': {
-#             'access_type': 'online',
-#         },
-#         'OAUTH_PKCE_ENABLED': True,
-#     },
-#     'facebook': {
-#         'METHOD': 'oauth2',
-#         'SDK_URL': '//connect.facebook.net/{locale}/sdk.js',
-#         'SCOPE': ['email', 'public_profile'],
-#         'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
-#         'INIT_PARAMS': {'cookie': True},
-#         'FIELDS': [
-#             'id',
-#             'first_name',
-#             'last_name',
-#             'middle_name',
-#             'name',
-#             'name_format',
-#             'picture',
-#             'short_name'
-#         ],
-#         'EXCHANGE_TOKEN': True,
-#         'LOCALE_FUNC': 'path.to.callable',
-#         'VERIFIED_EMAIL': False,
-#         'VERSION': 'v13.0',
-#         'GRAPH_API_URL': 'https://graph.facebook.com/v13.0',
-#     }
-# }
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -196,7 +157,7 @@ AUTH_MODEL = 'accounts.UserMananger'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        # 'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',  # django-oauth-toolkit >= 1.0.0
         'drf_social_oauth2.authentication.SocialAuthentication',
     ]
@@ -214,19 +175,6 @@ SWAGGER_SETTINGS = {
     'JSON_EDITOR': True,
 }
 
-# LOGIN_REDIRECT_URL = "http://127.0.0.1:8000/accounts/redirect/"
-# ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = False
-# AUTHENTICATION_BACKENDS = [
-    
-#     # Needed to login by username in Django admin, regardless of `allauth`
-#     'django.contrib.auth.backends.ModelBackend',
-
-#     # `allauth` specific authentication methods, such as login by e-mail
-#     'allauth.account.auth_backends.AuthenticationBackend',
-    
-# ]
-
- 
 AUTHENTICATION_BACKENDS = (
     # Others auth providers (e.g. Facebook, OpenId, etc)
     # Google  OAuth2
@@ -255,11 +203,10 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'id, name, email'
 }
 
-
+#SMTP configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = "verifyapidhruvin@gmail.com"
 EMAIL_HOST_PASSWORD = "qutzjtruvkehmrmk"
-
