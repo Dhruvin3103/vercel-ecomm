@@ -5,6 +5,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 # Create your models here.
 class User(AbstractBaseUser):
+
     first_name = models.CharField(max_length=20, help_text='Enter your First name')
     last_name = models.CharField(max_length=20, help_text='Enter your Last name')
     date_of_birth = models.DateField(help_text='Enter your Date of Birth', null=True, blank=True)
@@ -28,7 +29,7 @@ class User(AbstractBaseUser):
     is_admin = models.BooleanField(default=False)
     is_email_verified = models.BooleanField(default=False)
     is_phone_verified = models.BooleanField(default=False)
-
+    gender = models.CharField(max_length=100,default='prefer not to say')
     objects = UserManager()
 
     USERNAME_FIELD = 'username'

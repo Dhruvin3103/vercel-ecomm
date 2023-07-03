@@ -9,32 +9,16 @@ from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
+from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import redirect
-from allauth.account.models import EmailAddress
+# from allauth.account.models import EmailAddress
 from django.core.mail import send_mail
 from django.conf import settings
 from uuid import uuid4
 from django.contrib.sites.models import Site
 from .permisions import IsValidUser
  
-def RedirectVerify(request):
-    try:
-        user_em = EmailAddress.objects.get(email=request.user.email)
-        print(user_em)
-        if user_em:
-            user = User.objects.get(email=user_em.email)
-            user.username = user_em.email
-            user.is_email_verified=True
-            user.save()
-            return redirect("/")
-        else : 
-            raise Exception("No email found")
-    except Exception as e:
-        user_em = EmailAddress.objects.filter(email=request.user.email)
-        print(user_em.values())
-        raise Exception("Anonymous User"+" "+ str(e))
-
 class Register(GenericAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
@@ -105,7 +89,7 @@ class PasswordResetView(APIView):
             return HttpResponse('<h1>Token is not valid</h1>') 
 
 class UpdateUser(GenericAPIView):
-    authentication_classes = [TokenAuthentication]
+    authentication_classes = [OAuth2Authentication,TokenAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = UserSerializer
 
@@ -127,14 +111,14 @@ class Logout(APIView):
             return Response({'token':['This field is required.']}, status=status.HTTP_400_BAD_REQUEST)
 
 class UserData(APIView):
-    authentication_classes = [TokenAuthentication]
+    authentication_classes = [OAuth2Authentication,TokenAuthentication]
     permission_classes = [IsAuthenticated]
     def get(self, request):
         user = UserSerializer(User.objects.get(id = request.user.id))
         return Response(user.data)
     
 class AddressAPI(GenericAPIView, ListModelMixin, CreateModelMixin):
-    authentication_classes = [TokenAuthentication]
+    authentication_classes = [OAuth2Authentication,TokenAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = AddressSerializer
 

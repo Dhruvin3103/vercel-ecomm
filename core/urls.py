@@ -36,7 +36,8 @@ urlpatterns = [
     path('',schema_view.with_ui(cache_timeout=0), name='schema-json'),
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
-    path('Oauth/', include('allauth.urls')),
+    path('auth/', include('drf_social_oauth2.urls', namespace='drf')),
+    # path('Oauth/', include('allauth.urls')),
     path('catlog/',include('catlog.urls')),
     path('cart/',include('cart.urls'))
 ]
