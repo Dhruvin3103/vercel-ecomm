@@ -136,7 +136,7 @@ class AddressAPI(GenericAPIView, ListModelMixin, CreateModelMixin):
         return self.create(request)
 
 class UpdateAddressAPI(GenericAPIView, UpdateModelMixin, DestroyModelMixin):
-    authentication_classes = [TokenAuthentication]
+    authentication_classes = [OAuth2Authentication,TokenAuthentication]
     permission_classes = [IsAuthenticated, IsValidUser]
     serializer_class = AddressSerializer
     queryset = Address.objects.all()

@@ -1,11 +1,13 @@
 from django.shortcuts import render
-from rest_framework.generics import GenericAPIView
+from rest_framework.generics import GenericAPIView,ListAPIView
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, CreateModelMixin
 from rest_framework.response import Response
 from .models import ProdImage,ProdReview,Product,SubCateorgy,MainCateorgy,WishlistProduct
 from .serializers import MainCateorgySerializer,SubCateorgySerializer,ProductSerializer,ProdReviewSerializer,ProdImageSerializer,WishlistProductSerializer
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from .filters import ProductFilter
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 class MainCateorgyAPI(GenericAPIView, ListModelMixin):
@@ -20,6 +22,12 @@ class SubCateorgyAPI(GenericAPIView):
     def get(self, request, main_cat_id):
         serializer = SubCateorgySerializer(SubCateorgy.objects.filter(main_cateorgy = main_cat_id),many=True)
         return Response(serializer.data)
+
+class ProductFilterAPI(ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = ProductFilter
 
 class ProductAPI(GenericAPIView):
     serializer_class = ProductSerializer

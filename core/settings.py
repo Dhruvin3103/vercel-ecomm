@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'catlog',
     'colorfield',
     'cart',
+    'django_filters',
     #oauth
     'oauth2_provider',
     'social_django',
@@ -160,7 +161,9 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',  # django-oauth-toolkit >= 1.0.0
         'drf_social_oauth2.authentication.SocialAuthentication',
-    ]
+    ],
+
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
 
 SWAGGER_SETTINGS = {
