@@ -6,18 +6,7 @@ from .serializers import ProductCartSerializer
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-# Create your views here.
 
-# class CartAPI(GenericAPIView):
-#     authentication_classes = [TokenAuthentication]
-#     permission_classes = [IsAuthenticated]
-#     queryset = Cart.objects.all()
-#     serializer_class = CartSerializer
-
-#     def get(self, request):
-#         serializer = CartSerializer(Cart.objects.get(user = request.user.id)) 
-#         return Response(serializer.data)
-    
 class UpdateDeleteProductCartAPI(GenericAPIView):
     serializer_class = ProductCartSerializer
 

@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'catlog',
     'colorfield',
     'cart',
+    'order',
     'django_filters',
     #oauth
     'oauth2_provider',

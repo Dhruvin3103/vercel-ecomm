@@ -39,6 +39,7 @@ urlpatterns = [
     path('auth/', include('drf_social_oauth2.urls', namespace='drf')),
     # path('Oauth/', include('allauth.urls')),
     path('catlog/',include('catlog.urls')),
+    path('order/',include('order.urls')),
     path('cart/',include('cart.urls'))
 ]
 
