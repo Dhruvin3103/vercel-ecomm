@@ -18,5 +18,7 @@ class UserSerializer(serializers.ModelSerializer):
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
-        exclude = ['user']
+        # exclude = ['user']
+
+        fields = ["address_line_1","city","pincode","state","country"]
 
