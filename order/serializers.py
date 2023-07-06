@@ -20,13 +20,13 @@ class OrdersSerializer(serializers.ModelSerializer):
 
     def create(self,validated_data):
         try:
+            sleep(5)
             with transaction.atomic():
-                product = Product.objects.get(id = validated_data['product'].id)
+                product = Product.objects.select_for_update().get(id = validated_data['product'].id)
                 print(validated_data)
                 
                 if (product.available_count) >= validated_data['count'] :
                     product.available_count -= validated_data['count']
-                    sleep(5)
                     product.save()
                     return super().create(validated_data)
                 else:
