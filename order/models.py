@@ -28,4 +28,4 @@ class Orders(models.Model):
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return str(self.user)+"=>  "+str(self.product)+"=>  "+str(self.address)
+        return str(self.user)+"=>  "+str(self.product)+"=>  "+str(self.address)+" order_id : "+str(self.id)

@@ -13,7 +13,7 @@ from time import sleep
 class CustomValidationError(ValidationError):
     def __str__(self):
         # Custom error message format
-        return "Custom Validation Error: "+self.message
+        return " Error: "+self.message
 
 class OrdersSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,7 +24,7 @@ class OrdersSerializer(serializers.ModelSerializer):
 
     def create(self,validated_data):
         try:
-            sleep(5)
+            # sleep(5)
             with transaction.atomic():
                 request = self.context.get('request')
                 user = request.user
