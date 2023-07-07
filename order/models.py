@@ -17,14 +17,15 @@ class Orders(models.Model):
         ("2", "Cash on delivery")
     ]
     PAYMENT_STATUS = [
-        ("1", "payed"),
-        ("2", "Not payed")
+        ("1", "paid"),
+        ("2", "Not paid")
     ]
-    product = models.ForeignKey(Product,on_delete=models.CASCADE)
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     count = models.PositiveIntegerField()
-    order_status = models.CharField(choices=ORDER_STATUS,max_length=200)
-    payment_status = models.CharField(choices=PAYMENT_STATUS,max_length=200,default=2)
-    address = models.ForeignKey(Address,on_delete=models.CASCADE,default=get_default_address)
-    payement_type = models.CharField(choices=PAY_METHOD, max_length=50, default = 2)
+    order_status = models.CharField(choices=ORDER_STATUS, max_length=200)
+    payment_status = models.CharField(choices=PAYMENT_STATUS, max_length=200, default="2")
+    address = models.ForeignKey(Address, on_delete=models.CASCADE)
 
+    def __str__(self) -> str:
+        return str(self.user)+"=>  "+str(self.product)+"=>  "+str(self.address)

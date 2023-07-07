@@ -5,26 +5,42 @@ from accounts.models import User
 from catlog.models import Product
 from django.db import transaction
 from accounts.serializers import UserSerializer
+from accounts.models import User,Address
 # from BaseException im
 from time import sleep
+
 
 class CustomValidationError(ValidationError):
     def __str__(self):
         # Custom error message format
-        return "Custom Validation Error: {sry out of stock}"
+        return "Custom Validation Error: "+self.message
 
 class OrdersSerializer(serializers.ModelSerializer):
     class Meta:
         model = Orders
-        fields = ["count","payement_type","product"]
+        fields = ["count","payment_status","product"]
+
+
 
     def create(self,validated_data):
         try:
             sleep(5)
             with transaction.atomic():
+                request = self.context.get('request')
+                user = request.user
+                print('address' in request.data)
+                if 'address' in request.data:
+                    address = Address.objects.get(id=request.data['address'])
+                else:               
+                    address = Address.objects.filter(user=user).first()
+                validated_data['user'] = user
+                if address != None:
+                    validated_data['address'] = address
+                else:
+                    raise CustomValidationError(message="user has not entered any address in profile")
                 product = Product.objects.select_for_update().get(id = validated_data['product'].id)
-                print(validated_data)
-                if (product.available_count) >= validated_data['count'] :
+                print(validated_data,request.data)
+                if (product.available_count) >= validated_data['count']: 
                     product.available_count -= validated_data['count']
                     product.save()
                     return super().create(validated_data)

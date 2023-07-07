@@ -18,7 +18,7 @@ class CreateOrderAPI(GenericAPIView,CreateModelMixin,ListModelMixin):
         user = self.request.user
         queryset = self.queryset.filter(user=user)
         return queryset
-
+    
     def get(self,request):
         return self.list(request)
 
