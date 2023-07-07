@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import models
 
 from catlog.models import Product
@@ -6,13 +7,24 @@ from accounts.models import User,Address
 # Create your models here.
 
 class Orders(models.Model):
-    CHOICES = [
+    ORDER_STATUS = [
         ("1", "Dispatched"),
         ("2", "shipped"),
         ("3", "on the way"),
     ]
+    PAY_METHOD = [
+        ("1", "Online Payment"),
+        ("2", "Cash on delivery")
+    ]
+    PAYMENT_STATUS = [
+        ("1", "payed"),
+        ("2", "Not payed")
+    ]
     product = models.ForeignKey(Product,on_delete=models.CASCADE)
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     count = models.PositiveIntegerField()
-    status = models.CharField(choices=CHOICES,max_length=200)
-    address = models.ForeignKey(Address,on_delete=models.CASCADE)
+    order_status = models.CharField(choices=ORDER_STATUS,max_length=200)
+    payment_status = models.CharField(choices=PAYMENT_STATUS,max_length=200,default=2)
+    address = models.ForeignKey(Address,on_delete=models.CASCADE,default=get_default_address)
+    payement_type = models.CharField(choices=PAY_METHOD, max_length=50, default = 2)
+
