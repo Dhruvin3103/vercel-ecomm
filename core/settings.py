@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'oauth2_provider',
     'social_django',
     'drf_social_oauth2',
+    "payment"
     
 ]
 
@@ -214,3 +215,7 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = "verifyapidhruvin@gmail.com"
 EMAIL_HOST_PASSWORD = "qutzjtruvkehmrmk"
+
+#razorpay integration
+RAZORPAY_KEY_ID="rzp_test_9nEP19TDCikUcT"
+RAZORPAY_KEY_SECRET= "Qem2wIFLricpMBupIsnHamNZ"

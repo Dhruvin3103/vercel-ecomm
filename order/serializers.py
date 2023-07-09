@@ -18,7 +18,7 @@ class CustomValidationError(ValidationError):
 class OrdersSerializer(serializers.ModelSerializer):
     class Meta:
         model = Orders
-        fields = ["count","payment_status","product"]
+        fields = ["count","payment_status","product","payment_type"]
 
 
 
