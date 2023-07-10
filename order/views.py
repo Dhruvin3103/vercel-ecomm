@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, CreateModelMixin,DestroyModelMixin
 from rest_framework.generics import GenericAPIView
-from .serializers import OrdersSerializer
+from .serializers import OrdersSerializer,UpdatePaymentSerializer
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .models import Orders,Product
@@ -10,6 +10,17 @@ from payment.razorpay import RazorpayClient
 rz_client = RazorpayClient()
 # Create your views here.
 
+class UpdatePaymentStatusAPI(GenericAPIView):
+    queryset = Orders.objects.all()
+
+    def post(self, request):
+        serializer = UpdatePaymentStatusAPI(data=request.data)
+        order = Orders.objects.get(id = request.data["id"])
+        order.payment_status = "1"
+        order.save()
+        return Response({
+            "message" : "payed !!"
+        })
 
 class CreateOrderAPI(GenericAPIView,CreateModelMixin,ListModelMixin,DestroyModelMixin):
     permission_classes = [IsAuthenticated]
