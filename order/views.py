@@ -31,6 +31,7 @@ class CreateOrderAPI(GenericAPIView,CreateModelMixin,ListModelMixin,DestroyModel
     def post(self, request):
         try:
             data = self.create(request).data
+            print(data["payment_type"])
             if data["payment_type"] == "1":
                 amount = data["count"]*Product.objects.filter(id = data["product"]).values()[0]['price']
                 print(amount)
