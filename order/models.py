@@ -24,6 +24,7 @@ class Orders(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     count = models.PositiveIntegerField()
     order_status = models.CharField(choices=ORDER_STATUS, max_length=200)
+    payment_type = models.CharField(choices=PAY_METHOD,default="2",max_length=200)
     payment_status = models.CharField(choices=PAYMENT_STATUS, max_length=200, default="2")
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
 

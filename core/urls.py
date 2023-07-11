@@ -40,7 +40,8 @@ urlpatterns = [
     # path('Oauth/', include('allauth.urls')),
     path('catlog/',include('catlog.urls')),
     path('order/',include('order.urls')),
-    path('cart/',include('cart.urls'))
+    path('cart/',include('cart.urls')),
+    path('payment/',include('payment.urls'))
 ]
 
 if settings.DEBUG:

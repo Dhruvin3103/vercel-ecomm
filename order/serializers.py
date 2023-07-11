@@ -18,7 +18,7 @@ class CustomValidationError(ValidationError):
 class OrdersSerializer(serializers.ModelSerializer):
     class Meta:
         model = Orders
-        fields = ["count","payment_status","product"]
+        fields = ["count","payment_status","product","payment_type"]
 
 
 
@@ -31,6 +31,10 @@ class OrdersSerializer(serializers.ModelSerializer):
                 print('address' in request.data)
                 if 'address' in request.data:
                     address = Address.objects.get(id=request.data['address'])
+                    if address.user == user:
+                        pass
+                    else:
+                        raise CustomValidationError('sry')
                 else:               
                     address = Address.objects.filter(user=user).first()
                 validated_data['user'] = user
