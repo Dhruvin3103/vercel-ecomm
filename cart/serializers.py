@@ -34,6 +34,7 @@ class ProductCartSerializer(serializers.ModelSerializer):
             data['stock'] = "OUT OF STOCK"
         return data
 
+
         # data['total_price'] = data['cart']
         # data['product'] = ProductSerializer(
         #     Product.objects.get(pk=data['product'])).data
