@@ -13,7 +13,6 @@ from time import sleep
 
 class CustomValidationError(ValidationError):
     def __str__(self):
-        # Custom error message format
         return " Error: "+self.message
 
 #serializer when make order through cart
@@ -45,28 +44,33 @@ class CartOrdersSerializer(serializers.ModelSerializer):
                     raise CustomValidationError(message="user has not entered any address in profile")
 
                 product_cart_data = Product_cart.objects.filter(user =user)
+                print(len(product_cart_data)==0)
                 # print(product_cart_data)
-                prod_dict = {}
-                for data in product_cart_data:
-                    product = Product.objects.select_for_update().get(id = data.product_id)
-                    validated_data['product'] = data.product
-                    validated_data['count'] = data.count
-                    validated_data['size'] = data.size
-                    print(validated_data)
-                    if (product.available_count) >= data.count: 
-                        print("in if")
-                        product.available_count -= data.count
-                        product.save()
-                        prod_dict[data.id] = super().create(validated_data)
-                    else:
-                        print("in else")
-                        raise CustomValidationError(f'{validated_data["product"]}')
+                if len(product_cart_data)!=0:
+                    prod_dict = {}
+                    for data in product_cart_data:
+                        product = Product.objects.select_for_update().get(id = data.product_id)
+                        validated_data['product'] = data.product
+                        validated_data['count'] = data.count
+                        validated_data['size'] = data.size
+                        print(validated_data)
+                        if (product.available_count) >= data.count: 
+                            print("in if")
+                            product.available_count -= data.count
+                            product.save()
+                            prod_dict[data.id] = super().create(validated_data)
+                            data.delete()
+                        else:
+                            print("in else")
+                            raise CustomValidationError(f'{validated_data["product"]}')
+                    return prod_dict
+                else:
+                    raise CustomValidationError("You cart is empty")
                 # print(prod_dict)
-                return prod_dict
+                
         except Exception as e:
             raise e
 
-# "{1: <Orders: admin@gmail.com, None =>  blue tshirt id : 2 990=>  admin@gmail.com, None 2 order_id : 22>, 2: <Orders: admin@gmail.com, None =>  grey jeans id : 3 937=>  admin@gmail.com, None 2 order_id : 23>}"
     def to_representation(self, instance):
         request = self.context.get('request')
         amount = 0
