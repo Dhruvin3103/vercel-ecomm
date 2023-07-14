@@ -36,7 +36,6 @@ class ProductCartMixin(ListModelMixin,CreateModelMixin):
             return queryset
 
 class ProductCartAPI(ListCreateAPIView,ProductCartMixin,UpdateModelMixin):
-    authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = ProductCartSerializer
 

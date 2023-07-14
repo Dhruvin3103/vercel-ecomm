@@ -22,11 +22,29 @@
               "name": "Acme Corp", //your business name
               "description": "Test Transaction",
               "image": "https://example.com/your_logo",
-              "order_id": "order_MCqKJzd1oPjG2n", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+              "order_id": "order_MDfyeKESUmx5KY", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
               "handler": function (response){
-                  console.log(response.razorpay_payment_id);
-                  console.log(response.razorpay_order_id);
-                  console.log(response.razorpay_signature)
+                console.log(response)
+                //   console.log(response.razorpay_payment_id);
+                //   console.log(response.razorpay_order_id);
+                //   console.log(response.razorpay_signature)
+                var formdata = new FormData();
+                formdata.append("payment_id", response.razorpay_payment_id);
+                formdata.append("order_id_1", response.razorpay_order_id);
+                formdata.append("order_id_2", "8");
+                formdata.append("amount", "6397");
+                formdata.append("signature", response.razorpay_signature);
+
+                var requestOptions = {
+                method: 'POST',
+                body: formdata,
+                redirect: 'follow'
+                };
+
+                fetch("http://127.0.0.1:8000/payment/complete/", requestOptions)
+                .then(response => response.text())
+                .then(result => console.log(result))
+                .catch(error => console.log('error', error));
               },
               "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information, especially their phone number
                   "name": "Gaurav Kumar", //your customer's name

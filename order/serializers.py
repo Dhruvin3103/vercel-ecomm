@@ -74,9 +74,11 @@ class CartOrdersSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         request = self.context.get('request')
         amount = 0
+        ids = []
         for i in instance:
             amount += instance[i].product.price*instance[i].count
-        return {"amount":str(amount),"payment_type":request.data['payment_type']}
+            ids.append(instance[i].id)
+        return {"amount":str(amount),"payment_type":request.data['payment_type'],"order_ids":str(ids)}
 #serialzer when user do instant buy now
 class OrdersSerializer(serializers.ModelSerializer):
     class Meta:

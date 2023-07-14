@@ -18,9 +18,10 @@ class TransactionAPIView(APIView):
         if transaction_serializer.is_valid():
             rz_client.verify_payment_signature(
                 razorpay_payment_id = transaction_serializer.validated_data.get("payment_id"),
-                razorpay_order_id = transaction_serializer.validated_data.get("order_id_1"),
+                razorpay_order_id = transaction_serializer.validated_data.get("order_id"),
                 razorpay_signature = transaction_serializer.validated_data.get("signature")
             )
+            transaction_serializer.validated_data['user'] = request.user
             transaction_serializer.save()
             response = {
                 "status_code": status.HTTP_201_CREATED,
