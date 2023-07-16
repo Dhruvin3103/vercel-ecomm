@@ -52,7 +52,6 @@ INSTALLED_APPS = [
     'colorfield',
     'cart',
     'order',
-    'whitenoise',
     'django_filters',
     #oauth
     'oauth2_provider',
