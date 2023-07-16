@@ -146,3 +146,16 @@ class UpdateAddressAPI(GenericAPIView, UpdateModelMixin, DestroyModelMixin):
         return self.partial_update(request, id)
     def delete(self, request, id):
         return self.destroy(request, id)
+    
+class ResendVerificationAPI(APIView):
+    permission_classes = [IsAuthenticated]
+    def post (self, request):
+        try:
+            subject = 'Thank You for Regristering proceed to verify'
+            message = f'Hi!\n{request.user.username}, thank you for registering in Committee Managment System.\nPlease Click here to verfy Your Account {Site.objects.get_current().domain}accounts/verify/{request.user.id}/{request.user.email_token}/\nThis is a Computer generated mail don\'t reply to this mail'
+            email_from = settings.EMAIL_HOST_USER
+            recipient_list = [request.user.email, ]
+            send_mail( subject, message, email_from, recipient_list )
+            return Response("Email for verification has been send !")
+        except Exception as e:
+            return Response({"Error":str(e)})
