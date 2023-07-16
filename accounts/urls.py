@@ -1,4 +1,4 @@
-from .views import Register, Logout, UserData,UpdateUser,PasswordResetView,PasswordResetAPI,AddressAPI,UpdateAddressAPI
+from .views import Register, Logout, UserData,UpdateUser,PasswordResetView,PasswordResetAPI,AddressAPI,UpdateAddressAPI,ResendVerificationAPI
 from django.urls import path
 from rest_framework.authtoken import views
 
@@ -13,4 +13,5 @@ urlpatterns = [
     path('password-reset-redirect/<id>/<token>/', PasswordResetView.as_view(), name = 'password-reset-redirect'),
     path('user-address/', AddressAPI.as_view(), name="user-address"),
     path('user-address/<id>/', UpdateAddressAPI.as_view(), name="user-address-update"),
+    path('resend-verification-email/',ResendVerificationAPI.as_view(), name = 'resend-verification-email')
 ]
