@@ -6,21 +6,84 @@ from catlog.models import Product
 from django.db import transaction
 from accounts.serializers import UserSerializer
 from accounts.models import User,Address
+from cart.models import Product_cart
 # from BaseException im
 from time import sleep
 
 
 class CustomValidationError(ValidationError):
     def __str__(self):
-        # Custom error message format
         return " Error: "+self.message
 
+#serializer when make order through cart
+class CartOrdersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Orders
+        fields = ["id","payment_status","payment_type"]
+
+    def create(self,validated_data):
+        try:
+            # sleep(5)
+            with transaction.atomic():
+                #taking user id from request
+                request = self.context.get('request')
+                user = request.user
+                #checking of address
+                if 'address' in request.data:
+                    address = Address.objects.get(id=request.data['address'])
+                    if address.user == user:
+                        pass
+                    else:
+                        raise CustomValidationError('sry')
+                else:               
+                    address = Address.objects.filter(user=user).first()
+                validated_data['user'] = user
+                if address != None:
+                    validated_data['address'] = address
+                else:
+                    raise CustomValidationError(message="user has not entered any address in profile")
+
+                product_cart_data = Product_cart.objects.filter(user =user)
+                print(len(product_cart_data)==0)
+                # print(product_cart_data)
+                if len(product_cart_data)!=0:
+                    prod_dict = {}
+                    for data in product_cart_data:
+                        product = Product.objects.select_for_update().get(id = data.product_id)
+                        validated_data['product'] = data.product
+                        validated_data['count'] = data.count
+                        validated_data['size'] = data.size
+                        print(validated_data)
+                        if (product.available_count) >= data.count: 
+                            print("in if")
+                            product.available_count -= data.count
+                            product.save()
+                            prod_dict[data.id] = super().create(validated_data)
+                            data.delete()
+                        else:
+                            print("in else")
+                            raise CustomValidationError(f'{validated_data["product"]}')
+                    return prod_dict
+                else:
+                    raise CustomValidationError("You cart is empty")
+                # print(prod_dict)
+                
+        except Exception as e:
+            raise e
+
+    def to_representation(self, instance):
+        request = self.context.get('request')
+        amount = 0
+        ids = []
+        for i in instance:
+            amount += instance[i].product.price*instance[i].count
+            ids.append(instance[i].id)
+        return {"amount":str(amount),"payment_type":request.data['payment_type'],"order_ids":str(ids)}
+#serialzer when user do instant buy now
 class OrdersSerializer(serializers.ModelSerializer):
     class Meta:
         model = Orders
-        fields = ["count","payment_status","product","payment_type"]
-
-
+        fields = ["id","count","payment_status","product","payment_type"]
 
     def create(self,validated_data):
         try:
