@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
 # from decouple import config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -106,6 +107,14 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         # Feel free to alter this value to suit your needs.
+#         default='postgres://admin:o0SHH98JfYjFUUJv8cK9BzYfXBfC4z3K@dpg-ciq04p59aq0dcpoi3ds0-a.singapore-postgres.render.com/e_commerce_ib5r',
+#         conn_max_age=600
+#     )
+# }
 
 
 # Password validation
