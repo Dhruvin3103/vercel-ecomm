@@ -11,6 +11,11 @@ from cart.models import Product_cart
 from time import sleep
 
 
+class UpdatePaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Orders
+        fields = ["id"]
+
 class CustomValidationError(ValidationError):
     def __str__(self):
         return " Error: "+self.message
