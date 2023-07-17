@@ -15,8 +15,7 @@ from pathlib import Path
 from whitenoise.storage import CompressedStaticFilesStorage
 from decouple import config
 import os
-# import dj_database_url
-# from decouple import config
+import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -104,26 +103,22 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': config('NAME'),
-    #     'USER': config('USER'),
-    #     'PASSWORD': config('PASSWORD'),
-    # }
-}
-
 # DATABASES = {
-#     'default': dj_database_url.config(
-#         # Feel free to alter this value to suit your needs.
-#         default='postgres://admin:o0SHH98JfYjFUUJv8cK9BzYfXBfC4z3K@dpg-ciq04p59aq0dcpoi3ds0-a.singapore-postgres.render.com/e_commerce_ib5r',
-#         conn_max_age=600
-#     )
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+#     # 'default': {
+#     #     'ENGINE': 'django.db.backends.postgresql',
+#     #     'NAME': config('NAME'),
+#     #     'USER': config('USER'),
+#     #     'PASSWORD': config('PASSWORD'),
+#     # }
 # }
+
+DATABASES = {
+    'default': dj_database_url.parse(config('DATABASE_URL'))
+}
 
 
 # Password validation
