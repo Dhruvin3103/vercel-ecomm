@@ -18,7 +18,26 @@ from django.conf import settings
 from uuid import uuid4
 from django.contrib.sites.models import Site
 from .permisions import IsValidUser
- 
+from social_django.models import AbstractUserSocialAuth
+
+def RedirectVerify(request):
+    try:
+        user_em = AbstractUserSocialAuth.objects.get(uid=request.user.email)
+        # print(user_em==None)
+        print('hi')
+        print(user_em)
+        if user_em:
+            user = User.objects.get(user=user_em.user)
+            user.username=request.user.email
+            user.is_email_verified=True
+            user.save()
+            return redirect("/")
+        else : 
+            raise Exception("No email found")
+    except:
+        print('hi')
+        raise Exception("Anonymous User")
+
 class Register(GenericAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()

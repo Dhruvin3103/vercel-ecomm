@@ -20,5 +20,5 @@ class AddressSerializer(serializers.ModelSerializer):
         model = Address
         # exclude = ['user']
 
-        fields = ["address_line_1","city","pincode","state","country"]
+        fields = ["id","address_line_1","city","pincode","state","country"]
 

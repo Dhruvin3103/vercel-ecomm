@@ -62,7 +62,7 @@ INSTALLED_APPS = [
     
 ]
 
-SITE_ID = 1
+SITE_ID = 2
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -73,6 +73,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.common.CommonMiddleware',
 ]
@@ -220,6 +221,7 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
     'https://www.googleapis.com/auth/userinfo.email',
     'https://www.googleapis.com/auth/userinfo.profile',
+    'https://www.googleapis.com/oauth2/v2/userinfo'
 ]
 #Facebook configuration
 SOCIAL_AUTH_FACEBOOK_KEY = config('SOCIAL_AUTH_FACEBOOK_KEY')
@@ -240,3 +242,7 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 #razorpay integration
 RAZORPAY_KEY_ID=config('RAZORPAY_KEY_ID')
 RAZORPAY_KEY_SECRET=config('RAZORPAY_KEY_SECRET')
+    
+SOCIAL_AUTH_NEW_USER_REDIRECT_URL  = '/accounts/redirect/'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL  = '/accounts/redirect/'
+SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True

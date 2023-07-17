@@ -1,9 +1,10 @@
-from .views import Register, Logout, UserData,UpdateUser,PasswordResetView,PasswordResetAPI,AddressAPI,UpdateAddressAPI,ResendVerificationAPI
+from .views import Register, Logout, UserData,UpdateUser,PasswordResetView,PasswordResetAPI,AddressAPI,UpdateAddressAPI,ResendVerificationAPI,RedirectVerify
 from django.urls import path
 from rest_framework.authtoken import views
 
 urlpatterns = [
     path('sign-up/', Register.as_view()),
+    path('redirect/',RedirectVerify),
     path('login/', views.obtain_auth_token),
     path('logout/', Logout.as_view()),
     path('user-data/',UserData.as_view()),
