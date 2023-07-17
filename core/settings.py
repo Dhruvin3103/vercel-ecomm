@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from whitenoise.storage import CompressedStaticFilesStorage
-
+from decouple import config
 import os
 # import dj_database_url
 # from decouple import config
@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-2a)_pr=e-i^t^8(zt_-lw0m3kup!o3!6cdsdtz4*+hjg#=8b(4'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -220,15 +220,15 @@ AUTHENTICATION_BACKENDS = (
 )
 
 #Google configuration
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = "271052738198-egr0tad1q4u5fnsppj7r1djlisivifbh.apps.googleusercontent.com"
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "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"
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
     'https://www.googleapis.com/auth/userinfo.email',
     'https://www.googleapis.com/auth/userinfo.profile',
 ]
 #Facebook configuration
-SOCIAL_AUTH_FACEBOOK_KEY = '784016093366024'
-SOCIAL_AUTH_FACEBOOK_SECRET = '0e5735f8f21dde23821621b996c9e919'
+SOCIAL_AUTH_FACEBOOK_KEY = config('SOCIAL_AUTH_FACEBOOK_KEY')
+SOCIAL_AUTH_FACEBOOK_SECRET = config('SOCIAL_AUTH_FACEBOOK_SECRET')
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'id, name, email'
@@ -239,9 +239,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = "verifyapidhruvin@gmail.com"
-EMAIL_HOST_PASSWORD = "qutzjtruvkehmrmk"
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 #razorpay integration
-RAZORPAY_KEY_ID="rzp_test_9nEP19TDCikUcT"
-RAZORPAY_KEY_SECRET= "Qem2wIFLricpMBupIsnHamNZ"
+RAZORPAY_KEY_ID=config('RAZORPAY_KEY_ID')
+RAZORPAY_KEY_SECRET=config('RAZORPAY_KEY_SECRET')

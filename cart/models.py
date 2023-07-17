@@ -4,6 +4,13 @@ from catlog.models import Product
 # Create your models here.
 
 #removed cart model 
+
+# class Cart(models.Model):
+#     user = models.ForeignKey(User,on_delete=models.CASCADE)
+
+#     def __str__(self) -> str:
+#         return str(self.user)
+
 class Product_cart(models.Model):
     CHOICES = [
         ("S", "small"),
@@ -18,12 +25,3 @@ class Product_cart(models.Model):
     
     def __str__(self) -> str:
         return str(self.product)+" "+str(self.size) +" "+ str(self.user) +"   "+ str(self.count)
-    
-
-class Cart(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
-    product = models.ManyToManyField(Product_cart)
-    cart_price = models.PositiveIntegerField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    def __str__(self) -> str:
-        return str(self.user)
