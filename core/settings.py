@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 #comment ignore2
 
 from pathlib import Path
+from whitenoise.storage import CompressedStaticFilesStorage
+
 import os
 # import dj_database_url
 # from decouple import config
