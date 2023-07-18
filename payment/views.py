@@ -6,14 +6,26 @@ from rest_framework.response import Response
 from payment.razorpay import RazorpayClient
 from order.models import Orders
 from .models import Transaction
-
+from rest_framework.permissions import IsAuthenticated
 rz_client = RazorpayClient()
 
 
 class TransactionAPIView(APIView):
-    """This API will complete order and save the 
+    """This API will complete order and save the
     transaction"""
-    
+    permission_classes = [IsAuthenticated]
+    def get(self,request):
+        try:
+            transaction_obj = Transaction.objects.get(user=request.user)
+            return Response({
+                'data': transaction_obj
+            })
+        except Exception as e:
+            return Response(
+                {
+                    'error' : str(e)
+                }
+            )
     def post(self, request):
         transaction_serializer = TranscationModelSerializer(data=request.data)
         if transaction_serializer.is_valid():
@@ -22,7 +34,7 @@ class TransactionAPIView(APIView):
                 razorpay_order_id = transaction_serializer.validated_data.get("order_id_1"),
                 razorpay_signature = transaction_serializer.validated_data.get("signature")
             )
-            # transaction_serializer.validated_data['user'] = request.user
+            transaction_serializer.validated_data['user'] = request.user
             transaction_serializer.save()
             response = {
                 "status_code": status.HTTP_201_CREATED,
@@ -44,7 +56,20 @@ class TransactionAPIView(APIView):
 class TransactionForCartAPIView(APIView):
     """This API will complete order and save the 
     transaction"""
-    
+    permission_classes = [IsAuthenticated]
+    def get(self,request):
+        try:
+            transaction_obj = Transaction.objects.get(user=request.user)
+            return Response({
+                'data': transaction_obj
+            })
+        except Exception as e:
+            return Response(
+                {
+                    'error' : str(e)
+                }
+            )
+            
     def post(self, request):
         transaction_serializer = TranscationModelSerializer(data=request.data)
         if transaction_serializer.is_valid():
@@ -53,7 +78,7 @@ class TransactionForCartAPIView(APIView):
                 razorpay_order_id = transaction_serializer.validated_data.get("order_id_1"),
                 razorpay_signature = transaction_serializer.validated_data.get("signature")
             )
-            # transaction_serializer.validated_data['user'] = request.user
+            transaction_serializer.validated_data['user'] = request.user
             transaction_serializer.save()
             transaction_model = Transaction.objects.get(order_id_1=request.data["order_id_1"])
             print(transaction_serializer)

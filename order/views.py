@@ -49,7 +49,7 @@ class UpdatePaymentStatusAPI(GenericAPIView):
         })
 
 class CreateOrderAPI(GenericAPIView,CreateModelMixin,ListModelMixin,DestroyModelMixin):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     lookup_field = 'id'
     serializer_class = OrdersSerializer
     queryset = Orders.objects.all()
