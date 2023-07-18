@@ -102,7 +102,7 @@ class OrdersSerializer(serializers.ModelSerializer):
                     if address.user == user:
                         pass
                     else:
-                        raise CustomValidationError('sry')
+                        raise CustomValidationError('sry address issue')
                 else:               
                     address = Address.objects.filter(user=user).first()
                 validated_data['user'] = user
@@ -117,7 +117,7 @@ class OrdersSerializer(serializers.ModelSerializer):
                     product.save()
                     return super().create(validated_data)
                 else:
-                    raise CustomValidationError('sry')
+                    raise CustomValidationError('sry stock that product got sold out')
         except Exception as e:
             raise e
 # {'count': 4, 'status': '1', 'product': <Product: red tshirt id : 1 20>, 'user': <User: admin@gmail.com, +919967118952>, 'address': <Address: dhruvinhemant5, None 2>}
