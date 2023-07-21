@@ -19,25 +19,27 @@ class SubCateorgy(models.Model):
     def __str__(self) -> str:
         return self.name
 
+class SizeChart(models.Model):
+    name = models.CharField(max_length = 5)
+    desc = models.CharField(max_length = 50, null=True, blank=True)
+
+class Size(models.Model):
+    sub_cateorgy = models.ForeignKey(SubCateorgy, on_delete=models.CASCADE)
+    size = models.ForeignKey(SizeChart, on_delete=models.CASCADE)
+
 class Product(models.Model):
-    CHOICES = [
-        ("S", "small"),
-        ("M", "Mdeium"),
-        ("L", "Large"),
-        ("XL", "Extra large"),
-    ]
     name = models.CharField(max_length=300,null=False)
     color = ColorField(default='#FF0000')
     price = models.IntegerField(default=0)
-    available_count = models.IntegerField(default=0)
     sub_cateorgy = models.ForeignKey(SubCateorgy,on_delete=models.CharField)
-    is_small_size = models.BooleanField(default=False)
-    is_medium_size = models.BooleanField(default=False)
-    is_large_size = models.BooleanField(default=False)
-    is_extra_large_size = models.BooleanField(default=False)
 
     def __str__(self) -> str:
-        return self.name+" "+"id : "+str(self.id)+" "+str(self.available_count)
+        return self.name+" "+"id : "+str(self.id)
+
+class SizeProduct(models.Model):
+    size = models.ForeignKey(Size, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    available_count = models.IntegerField(default=0)
 
 class ProdImage(models.Model):
     image = models.ImageField(upload_to="catlog/subcatlog/product")
@@ -45,7 +47,6 @@ class ProdImage(models.Model):
 
     def __str__(self) -> str:
         return self.image_fk.name +' '+ str(self.id)
-
 
 class ProdReview(models.Model):
     CHOICES = [
