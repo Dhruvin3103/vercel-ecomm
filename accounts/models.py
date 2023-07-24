@@ -9,7 +9,7 @@ class User(AbstractBaseUser):
     first_name = models.CharField(max_length=20, help_text='Enter your First name')
     last_name = models.CharField(max_length=20, help_text='Enter your Last name')
     date_of_birth = models.DateField(help_text='Enter your Date of Birth', null=True, blank=True)
-    phone = PhoneNumberField(null=True,blank=True,help_text='Enter Phone Number')
+    phone = PhoneNumberField(null=True,blank=True,help_text='Enter Phone Number',unique=True)
     username = models.EmailField(
         verbose_name='Users Email',
         max_length=255,
