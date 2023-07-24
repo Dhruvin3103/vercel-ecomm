@@ -2,6 +2,7 @@ from rest_framework import serializers
 from catlog.models import Product
 from catlog.serializers import ProductSerializer
 from .models import Product_cart
+from catlog.models import SizeProduct
 
 # class CartSerializer(serializers.ModelSerializer):
 #     class Meta:
@@ -19,15 +20,16 @@ from .models import Product_cart
 class ProductCartSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product_cart
-        fields = ["size","count","product"]
+        fields = ["count","product"]
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        price = Product.objects.filter(id=data['product']).values()[0]
-        # print(instance.user.id,(Product.objects.filter(id=data['product']).values()[0]['price']))
-        available = price['available_count']
+        product = SizeProduct.objects.get(id=data['product'])
+        print(product.product.price)
+        # print(instance.user.id,(Product.objects.filter(id=data['product']).values()[0]['product']))
+        available = product.available_count
         
-        data['product_price'] = price['price']
-        data['total_price'] = price['price'] * data['count']
+        data['product_price'] = product.product.price
+        data['total_price'] = product.product.price * data['count']
         if data['count']<=available:
             data['stock'] = "IN STOCK"
         else:
