@@ -206,6 +206,7 @@ AUTHENTICATION_BACKENDS = (
     # Others auth providers (e.g. Facebook, OpenId, etc)
     # Google  OAuth2
     'social_core.backends.google.GoogleOAuth2',
+    'drf_social_oauth2.backends.GoogleIdentityBackend',
     #Facebook OAuth2
     'social_core.backends.facebook.FacebookAppOAuth2',
     'social_core.backends.facebook.FacebookOAuth2',
