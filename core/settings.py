@@ -73,6 +73,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.common.CommonMiddleware',
 ]
@@ -103,22 +104,26 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 #     # 'default': {
 #     #     'ENGINE': 'django.db.backends.postgresql',
 #     #     'NAME': config('NAME'),
 #     #     'USER': config('USER'),
 #     #     'PASSWORD': config('PASSWORD'),
 #     # }
+}
+
+# DATABASES = {
+#     'default': dj_database_url.parse(config('DATABASE_URL'))
 # }
 
-DATABASES = {
-    'default': dj_database_url.parse(config('DATABASE_URL'))
-}
+# DATABASES = {
+#     'default': dj_database_url.parse(config('DATABASE_URL'))
+# }
 
 
 # Password validation
@@ -221,6 +226,7 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
     'https://www.googleapis.com/auth/userinfo.email',
     'https://www.googleapis.com/auth/userinfo.profile',
+    'https://www.googleapis.com/oauth2/v2/userinfo'
 ]
 #Facebook configuration
 SOCIAL_AUTH_FACEBOOK_KEY = config('SOCIAL_AUTH_FACEBOOK_KEY')
@@ -241,3 +247,7 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 #razorpay integration
 RAZORPAY_KEY_ID=config('RAZORPAY_KEY_ID')
 RAZORPAY_KEY_SECRET=config('RAZORPAY_KEY_SECRET')
+    
+SOCIAL_AUTH_NEW_USER_REDIRECT_URL  = '/accounts/redirect/'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL  = '/accounts/redirect/'
+SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True

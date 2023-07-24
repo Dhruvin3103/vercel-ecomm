@@ -12,11 +12,10 @@ rz_client = RazorpayClient()
 # Create your views here.
 
 class CreateCartOrderAPI(GenericAPIView,CreateModelMixin,ListModelMixin,DestroyModelMixin):
+    # permission_classes = [IsAuthenticated]
     serializer_class = CartOrdersSerializer
     queryset = Orders.objects.all()
 
-    def get(self,request):
-        return self.list(request)
     def post(self, request):
         try:
             data = self.create(request).data

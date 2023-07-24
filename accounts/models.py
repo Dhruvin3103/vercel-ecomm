@@ -1,9 +1,12 @@
 from django.db import models
+from django.forms import ValidationError
 from .managers import UserManager
 from django.contrib.auth.models import AbstractBaseUser
 from phonenumber_field.modelfields import PhoneNumberField
 
 # Create your models here.
+
+
 class User(AbstractBaseUser):
 
     first_name = models.CharField(max_length=20, help_text='Enter your First name')
