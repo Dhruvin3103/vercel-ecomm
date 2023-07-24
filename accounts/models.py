@@ -1,4 +1,5 @@
 from django.db import models
+from django.forms import ValidationError
 from .managers import UserManager
 from django.contrib.auth.models import AbstractBaseUser
 from phonenumber_field.modelfields import PhoneNumberField
@@ -9,7 +10,7 @@ class User(AbstractBaseUser):
     first_name = models.CharField(max_length=20, help_text='Enter your First name')
     last_name = models.CharField(max_length=20, help_text='Enter your Last name')
     date_of_birth = models.DateField(help_text='Enter your Date of Birth', null=True, blank=True)
-    phone = PhoneNumberField(null=True,blank=True,help_text='Enter Phone Number')
+    phone = PhoneNumberField(null=True,blank=True,help_text='Enter Phone Number',)
     username = models.EmailField(
         verbose_name='Users Email',
         max_length=255,
@@ -38,6 +39,11 @@ class User(AbstractBaseUser):
     def __str__(self):
         return self.username+', '+str(self.phone)
 
+    def clean(self):
+        # Check if the email already exists in the database
+        existing_user = User.objects.filter(email=self.email).first()
+        if existing_user and existing_user.pk != self.pk:
+            raise ValidationError('Email already exists. Please use a different email address.')
     
     def has_perm(self, perm, obj=None):
         "Does the user have a specific permission?"

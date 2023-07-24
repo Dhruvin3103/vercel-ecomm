@@ -63,7 +63,7 @@ class Register(GenericAPIView):
             if not serializer.is_valid():
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             serializer.save()
-            message = f'Hi!\n{serializer.data["username"]}, thank you for registering in Committee Managment System.\nPlease Click here to verfy Your Account {Site.objects.get_current().domain}accounts/verify/{serializer.data["id"]}/{serializer.data["email_token"]}/\nThis is a Computer generated mail don\'t reply to this mail'
+            message = f'Hi!\n{serializer.data["first_name"]}, thank you for registering in our website.\nPlease Click here to verfy Your Account {Site.objects.get_current().domain}accounts/verify/{serializer.data["id"]}/{serializer.data["email_token"]}/\nThis is a Computer generated mail don\'t reply to this mail'
             email_from = settings.EMAIL_HOST_USER
             recipient_list = [serializer.data['email'], ]
             send_mail( subject, message, email_from, recipient_list )
