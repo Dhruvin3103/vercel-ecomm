@@ -13,20 +13,23 @@ class UserManager(BaseUserManager):
         Creates and saves a User with the given username, date of
         birth and password.
         """
-        if not username:
-            raise ValueError('Users must have an username address')
+        try:
+            if not username:
+                raise ValueError('Users must have an username address')
 
-        if self.filter(email=email).exists():
-            return False, 'Email already exists. Please use a different email address.'
-        
-        user = self.model(
-            username=self.normalize_email(username),
-            email=self.normalize_email(email),
-        )
+            # if self.filter(email=email).exists():
+            #     raise CustomValidationError(message="that email is already exits use different email ")
+            
+            user = self.model(
+                username=self.normalize_email(username),
+                email=self.normalize_email(email),
+            )
 
-        user.set_password(password)
-        user.save(using=self._db)
-        return True, user
+            user.set_password(password)
+            user.save(using=self._db)
+            return user
+        except Exception as e:
+            return None 
 
     def create_superuser(self, username, email, password=None):
         """
