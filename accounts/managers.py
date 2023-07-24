@@ -7,17 +7,20 @@ class UserManager(BaseUserManager):
         Creates and saves a User with the given username, date of
         birth and password.
         """
-        if not username:
-            raise ValueError('Users must have an username address')
+        try:
+            if not username:
+                raise ValueError('Users must have an username address')
 
-        user = self.model(
-            username=self.normalize_email(username),
-            email=self.normalize_email(email),
-        )
+            user = self.model(
+                username=self.normalize_email(username),
+                email=self.normalize_email(email),
+            )
 
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
+            user.set_password(password)
+            user.save(using=self._db)
+            return user
+        except:
+            return None
 
     def create_superuser(self, username, email, password=None):
         """
