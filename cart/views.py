@@ -47,13 +47,12 @@ class ProductCartAPI(ListCreateAPIView,ProductCartMixin,UpdateModelMixin):
     def perform_create(self, serializer):
         user = self.request.user
         product = serializer.validated_data['product']
-        size = serializer.validated_data['size']
         count = serializer.validated_data['count']
         lookup_field = 'product'
 
         try:
             # Check if the product already exists in the user's cart
-            cart_item = Product_cart.objects.get(user=user, product=product, size = size)
+            cart_item = Product_cart.objects.get(user=user, product=product)
             # Increment the count of the existing cart item
             cart_item.count += count
             cart_item.save()
