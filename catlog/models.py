@@ -23,9 +23,8 @@ class SizeChart(models.Model):
     name = models.CharField(max_length = 5)
     desc = models.CharField(max_length = 50, null=True, blank=True)
 
-class Size(models.Model):
-    sub_cateorgy = models.ForeignKey(SubCateorgy, on_delete=models.CASCADE)
-    size = models.ForeignKey(SizeChart, on_delete=models.CASCADE)
+    def __str__(self) -> str:
+        return self.name
 
 class Product(models.Model):
     name = models.CharField(max_length=300,null=False)
@@ -37,9 +36,15 @@ class Product(models.Model):
         return self.name+" "+"id : "+str(self.id)
 
 class SizeProduct(models.Model):
-    size = models.ForeignKey(Size, on_delete=models.CASCADE)
+    size = models.ForeignKey(SizeChart, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    available_count = models.IntegerField(default=0)
+    available_count = models.PositiveBigIntegerField(default=0)
+
+    def __str__(self) -> str:
+        return str(self.size.name) + " "+str(self.product)+"available_count : "+ str(self.available_count)
+    
+    class Meta:
+        unique_together = ('size','product')
 
 class ProdImage(models.Model):
     image = models.ImageField(upload_to="catlog/subcatlog/product")
