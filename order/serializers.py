@@ -2,7 +2,7 @@ from django.forms import ValidationError
 from rest_framework import serializers
 from .models import Orders
 from accounts.models import User
-from catlog.models import Product
+from catlog.models import ProductBySize,Product
 from django.db import transaction
 from accounts.serializers import UserSerializer
 from accounts.models import User,Address
@@ -88,7 +88,7 @@ class CartOrdersSerializer(serializers.ModelSerializer):
 class OrdersSerializer(serializers.ModelSerializer):
     class Meta:
         model = Orders
-        fields = ["id","count","payment_status","product","payment_type"]
+        fields = ["id","count","payment_status","product_by_size","payment_type"]
 
     def create(self,validated_data):
         try:
@@ -96,7 +96,7 @@ class OrdersSerializer(serializers.ModelSerializer):
             with transaction.atomic():
                 request = self.context.get('request')
                 user = request.user
-                print('address' in request.data)
+                # print('address' in request.data)
                 if 'address' in request.data:
                     address = Address.objects.get(id=request.data['address'])
                     if address.user == user:
@@ -110,14 +110,32 @@ class OrdersSerializer(serializers.ModelSerializer):
                     validated_data['address'] = address
                 else:
                     raise CustomValidationError(message="user has not entered any address in profile")
-                product = Product.objects.select_for_update().get(id = validated_data['product'].id)
-                print(validated_data,request.data)
+                product = ProductBySize.objects.select_for_update().get(id = validated_data['product_by_size'].id)
+                # print(validated_data,request.data)
                 if (product.available_count) >= validated_data['count']: 
                     product.available_count -= validated_data['count']
+                    price = Product.objects.get(id= validated_data['product_by_size'].product.id).price
+                    amount = validated_data["count"]*price
+                    print(amount)
                     product.save()
                     return super().create(validated_data)
                 else:
                     raise CustomValidationError('sry stock that product got sold out')
         except Exception as e:
             raise e
+    
+    def to_representation(self, instance):
+        print(instance.product_by_size.product.id)
+        price = Product.objects.get(id= instance.product_by_size.product.id).price
+        amount = instance.count*price
+        
+        # instance['amount'] = amount
+        return {
+            "id": instance.id,
+            "count": instance.count,
+            "payment_status": instance.payment_status,
+            "product_by_size": instance.product_by_size.id,
+            "payment_type": instance.payment_type,
+            "amount":amount
+        }
 # {'count': 4, 'status': '1', 'product': <Product: red tshirt id : 1 20>, 'user': <User: admin@gmail.com, +919967118952>, 'address': <Address: dhruvinhemant5, None 2>}

@@ -1,6 +1,6 @@
 from django.db import models
 from accounts.models import User
-from catlog.models import Product,SizeProduct
+from catlog.models import Product,ProductBySize
 # Create your models here.
 
 #removed cart model 
@@ -13,7 +13,7 @@ from catlog.models import Product,SizeProduct
 
 class Product_cart(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)#changed cart to user
-    product = models.ForeignKey(SizeProduct,on_delete=models.CASCADE)
+    product_by_size = models.ForeignKey(ProductBySize,on_delete=models.CASCADE)
     count = models.IntegerField()
     
     def __str__(self) -> str:

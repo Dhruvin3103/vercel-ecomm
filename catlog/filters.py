@@ -1,5 +1,5 @@
 import django_filters
-from .models import Product
+from .models import Product,ProductBySize
 class ProductFilter(django_filters.FilterSet):
     price = django_filters.RangeFilter()
 

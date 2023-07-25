@@ -5,7 +5,7 @@ from .serializers import OrdersSerializer,CartOrdersSerializer
 from .serializers import OrdersSerializer,UpdatePaymentSerializer
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from .models import Orders,Product
+from .models import Orders,Product,ProductBySize
 from payment.razorpay import RazorpayClient
 
 rz_client = RazorpayClient()
@@ -66,10 +66,11 @@ class CreateOrderAPI(GenericAPIView,CreateModelMixin,ListModelMixin,DestroyModel
     def post(self, request):
         try:
             data = self.create(request).data
-            print(data["payment_type"])
+            # print(data["payment_type"])
             if data["payment_type"] == "1":
-                amount = data["count"]*Product.objects.filter(id = data["product"]).values()[0]['price']
-                print(amount)
+                price = Product.objects.get(id=ProductBySize.objects.get(id = data["product_by_size"]).id).price
+                amount = data["count"]*price
+                # print(amount)
                 order_response = rz_client.create_order(
                     amount=amount,
                     currency= "INR"

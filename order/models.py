@@ -1,7 +1,7 @@
 from datetime import datetime
 from django.db import models
 
-from catlog.models import Product
+from catlog.models import Product,ProductBySize
 from accounts.models import User,Address
 
 # Create your models here.
@@ -19,14 +19,13 @@ class Orders(models.Model):
         ("1", "paid"),
         ("2", "Not paid")
     ]
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product_by_size = models.ForeignKey(ProductBySize, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     count = models.PositiveIntegerField()
-    size = models.CharField(max_length=200,default="S")
     order_status = models.CharField(choices=ORDER_STATUS, max_length=200)
     payment_type = models.CharField(choices=PAY_METHOD,default="2",max_length=200)
     payment_status = models.CharField(choices=PAYMENT_STATUS, max_length=200, default="2")
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return str(self.user)+" =>  "+str(self.product)+"=>  "+str(self.address)+" order_id : "+str(self.id)
+        return str(self.user)+" =>  "+str(self.product_by_size)+"=>  "+str(self.address)+" order_id : "+str(self.id)

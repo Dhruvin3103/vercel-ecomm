@@ -35,7 +35,7 @@ class Product(models.Model):
     def __str__(self) -> str:
         return self.name+" "+"id : "+str(self.id)
 
-class SizeProduct(models.Model):
+class ProductBySize(models.Model):
     size = models.ForeignKey(SizeChart, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     available_count = models.PositiveBigIntegerField(default=0)

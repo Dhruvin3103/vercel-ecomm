@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import ProdImage,ProdReview,Product,SubCateorgy,MainCateorgy, WishlistProduct,SizeProduct
+from .models import ProdImage,ProdReview,Product,SubCateorgy,MainCateorgy, WishlistProduct,ProductBySize
 from accounts.models import User
 from accounts.serializers import UserSerializer
 
@@ -29,12 +29,12 @@ class ProductSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
         data['images'] = [i['image'] for i in ProdImageSerializer(ProdImage.objects.filter(image_fk = data['id']),many=True).data]
-        data['sizes'] =     [i for i in SizeSerializer(SizeProduct.objects.filter(product=data['id']),many=True).data]
+        data['sizes'] =     [i for i in ProductBySizeSerializer(ProductBySize.objects.filter(product=data['id']),many=True).data]
         return data
 
-class SizeSerializer(serializers.ModelSerializer):
+class ProductBySizeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = SizeProduct
+        model = ProductBySize
         fields = "__all__"
     
     def to_representation(self, instance):
