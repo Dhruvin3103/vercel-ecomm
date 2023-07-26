@@ -13,7 +13,6 @@ django-filter
 django-oauth-toolkit
 django-phonenumber-field
 django-phonenumbers
-django-rest-framework-async
 djangorestframework
 drf-social-oauth2
 drf-yasg
