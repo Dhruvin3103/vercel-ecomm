@@ -1,5 +1,6 @@
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
+from rest_framework.mixins import ListModelMixin
 from rest_framework.views import APIView
 from .serializers import RazorpayOrderSerializer,TranscationModelSerializer
 from rest_framework.response import Response
@@ -14,18 +15,7 @@ class TransactionAPIView(APIView):
     """This API will complete order and save the
     transaction"""
     permission_classes = [IsAuthenticated]
-    def get(self,request):
-        try:
-            transaction_obj = Transaction.objects.get(user=request.user)
-            return Response({
-                'data': transaction_obj
-            })
-        except Exception as e:
-            return Response(
-                {
-                    'error' : str(e)
-                }
-            )
+
     def post(self, request):
         transaction_serializer = TranscationModelSerializer(data=request.data)
         if transaction_serializer.is_valid():
@@ -52,24 +42,19 @@ class TransactionAPIView(APIView):
             }
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
         
-        
+class TransactionGetAPIView(GenericAPIView,ListModelMixin):
+    permission_classes = [IsAuthenticated]
+    serializer_class = TranscationModelSerializer
+    queryset = Transaction.objects.all()
+
+    def get(self,request):
+        return self.list(request)
+
 class TransactionForCartAPIView(APIView):
     """This API will complete order and save the 
     transaction"""
     permission_classes = [IsAuthenticated]
-    def get(self,request):
-        try:
-            transaction_obj = Transaction.objects.get(user=request.user)
-            return Response({
-                'data': transaction_obj
-            })
-        except Exception as e:
-            return Response(
-                {
-                    'error' : str(e)
-                }
-            )
-            
+
     def post(self, request):
         transaction_serializer = TranscationModelSerializer(data=request.data)
         if transaction_serializer.is_valid():
