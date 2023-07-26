@@ -29,7 +29,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app']
+ALLOWED_HOSTS = ['.vercel.app','*']
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -104,22 +104,22 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# #     # 'default': {
-# #     #     'ENGINE': 'django.db.backends.postgresql',
-# #     #     'NAME': config('NAME'),
-# #     #     'USER': config('USER'),
-# #     #     'PASSWORD': config('PASSWORD'),
-# #     # }
-# }
-
 DATABASES = {
-    'default': dj_database_url.parse(config('DATABASE_URL'))
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+#     # 'default': {
+#     #     'ENGINE': 'django.db.backends.postgresql',
+#     #     'NAME': config('NAME'),
+#     #     'USER': config('USER'),
+#     #     'PASSWORD': config('PASSWORD'),
+#     # }
 }
+
+# DATABASES = {
+#     'default': dj_database_url.parse(config('DATABASE_URL'))
+# }
 
 # DATABASES = {
 #     'default': dj_database_url.parse(config('DATABASE_URL'))
