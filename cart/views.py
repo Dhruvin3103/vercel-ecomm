@@ -20,7 +20,7 @@ class UpdateDeleteProductCartAPI(GenericAPIView):
     
     def delete(self,request):
         try:
-            Product_cart.objects.get(user = request.user.id, product_by_size = request.data['product_by_size']).delete()
+            Product_cart.objects.get(id=request.data['id']).delete()
             return Response({'response':'deleted successfully'})
         except Exception as e:
             return Response({"error":str(e)})

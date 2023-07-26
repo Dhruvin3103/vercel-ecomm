@@ -17,4 +17,4 @@ class Product_cart(models.Model):
     count = models.IntegerField()
     
     def __str__(self) -> str:
-        return str(self.product) +" "+ str(self.user) +"   "+ str(self.count)
+        return str(self.product_by_size) +" "+ str(self.user) +"   "+ str(self.count)

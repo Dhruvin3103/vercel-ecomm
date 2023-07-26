@@ -54,10 +54,9 @@ class CartOrdersSerializer(serializers.ModelSerializer):
                 if len(product_cart_data)!=0:
                     prod_dict = {}
                     for data in product_cart_data:
-                        product = Product.objects.select_for_update().get(id = data.product_id)
-                        validated_data['product'] = data.product
+                        product = ProductBySize.objects.select_for_update().get(id = data.product_by_size_id)
+                        validated_data['product_by_size'] = data.product_by_size
                         validated_data['count'] = data.count
-                        validated_data['size'] = data.size
                         print(validated_data)
                         if (product.available_count) >= data.count: 
                             print("in if")
@@ -67,7 +66,7 @@ class CartOrdersSerializer(serializers.ModelSerializer):
                             data.delete()
                         else:
                             print("in else")
-                            raise CustomValidationError(f'{validated_data["product"]}')
+                            raise CustomValidationError(f'{validated_data["product_by_size"]}')
                     return prod_dict
                 else:
                     raise CustomValidationError("You cart is empty")
@@ -81,14 +80,14 @@ class CartOrdersSerializer(serializers.ModelSerializer):
         amount = 0
         ids = []
         for i in instance:
-            amount += instance[i].product.price*instance[i].count
+            amount += instance[i].product_by_size.product.price*instance[i].count
             ids.append(instance[i].id)
         return {"amount":str(amount),"payment_type":request.data['payment_type'],"order_ids":str(ids)}
 #serialzer when user do instant buy now
 class OrdersSerializer(serializers.ModelSerializer):
     class Meta:
         model = Orders
-        fields = ["id","count","payment_status","product_by_size","payment_type"]
+        fields = ["id","count","payment_status","product_by_size","payment_type","order_status"]
 
     def create(self,validated_data):
         try:
@@ -125,7 +124,7 @@ class OrdersSerializer(serializers.ModelSerializer):
             raise e
     
     def to_representation(self, instance):
-        print(instance.product_by_size.product.id)
+        print(instance)
         price = Product.objects.get(id= instance.product_by_size.product.id).price
         amount = instance.count*price
         
@@ -136,6 +135,7 @@ class OrdersSerializer(serializers.ModelSerializer):
             "payment_status": instance.payment_status,
             "product_by_size": instance.product_by_size.id,
             "payment_type": instance.payment_type,
-            "amount":amount
+            "amount":amount,
+            "order_status":instance.order_status
         }
 # {'count': 4, 'status': '1', 'product': <Product: red tshirt id : 1 20>, 'user': <User: admin@gmail.com, +919967118952>, 'address': <Address: dhruvinhemant5, None 2>}
